@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+  <title>CTM_SPORT</title>
+  <link rel="stylesheet" href="css/pure-min.css" />
+
+    <link rel="stylesheet" href="css/grids-responsive-min.css" />
+<link rel="stylesheet" href="css/customer.css" />
+<link rel="stylesheet" href="css/videojs.errors.css">
+  <script src="js/jquery-v2.0.2.min.js"></script>
+
+ 
+  <!-- video.js -->
+  
+
+  <link rel="stylesheet" href="css/video-js.css">
+  <script src="js/video.js"></script>
+  <script>
+    videojs.options.flash.swf = "js/video-js.swf";
+  </script>
+ 
+ 
+ <style>
+ 	
+ 	@media screen and (max-width: 374px) {
+	 	#video{
+	   
+	    margin-top:90px;
+	  }	
+ 	}
+ 	@media screen and (min-width: 568px) and (max-width: 1366px) and (orientation: landscape) {
+ 
+
+	   #video {
+	   position: fixed;
+	   right: 0;
+	   bottom: 0;
+	   width: auto;
+	   min-width: 100%;
+	   height: auto;
+	   min-height: 100%;
+	   z-index: 1000045;
+	   } 
+
+}
+    
+ 	
+ </style>
+ 
+</head>
+<body> 
+ 
+ 
+ <header class="home-menu pure-menu pure-menu-horizontal pure-menu-fixed">
+        <a class="pure-menu-heading" href="index.html"><img src="image/logo.png">
+        </a>
+     
+
+    </header>
+ 
+ 
+ 
+  <video id="video"
+         class="video-js vjs-16-9 vjs-default-skin" 
+         poster="http://video-js.zencoder.com/oceans-clip.png"
+         data-setup='{"techOrder": ["flash","html5"],"playbackRates": [0.5, 1, 1.5, 2],"plugins": {"errors": {}}}' 
+         controls 
+         >
+    <source src="" type="video/mp4" />
+  </video>
+  
+  <br>
+  <br>
+<script src="js/videojs.errors.js" type="application/javascript;version=1.7"></script>
+
+  <script>
+  	  var json = window.localStorage.getItem('userDetail');
+  	  var playurl = window.localStorage.getItem('playurl');
+      var userDetail = JSON.parse(json);
+      
+      var $vid_obj;
+      
+      
+  	//$(document).ready(function() {
+  	  window.onload = function() {
+  	  
+  	  //$('#user a').html("<span class=\"hidden-xs\" style=\"float:left;\">"+userDetail.username+",&nbsp;</span>"+"Log out");
+      //$('#user a').attr("href","#").attr("onclick","logout()");
+  	  
+  	  
+
+	    $vid_obj = videojs("video");
+	  	$vid_obj.src(playurl);
+	    $vid_obj.on('loadstart',function(){
+	        $vid_obj.play();
+	    });
+	    
+	    /*
+	     $vid_obj.errors({
+			  errors: {
+			    4: {
+			      headline: 'This is an override for the generic MEDIA_ERR_DECODE',
+			      message: 'This is a custom error message'
+			    }
+			  }
+				});
+				
+				$vid_obj.errors({
+			  errors: {
+			    999: {
+			      headline: 'must 18 years old',
+			      message: 'must 18 years old'
+			    }
+			  }
+				});
+	    
+	    video.error({code: 999});
+	    */
+	    
+	    /*
+	      $vid_obj.on('error', function(e) {
+	        console.log(e);
+	        e.stopImmediatePropagation();
+	        var error = this.player().error();
+	        console.log('error!', error.code, error.type , error.message);
+     });*/   
+           
+	    if(window.JSInterface){
+		   	 window.JSInterface.canPlayVideo();
+		  }
+	    
+  	}
+ // });
+  
+  
+  function videojsPlay(){
+  	 $vid_obj.play();
+  }
+  
+  
+   
+   
+  </script>
+</body>
+</html>

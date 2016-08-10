@@ -1,0 +1,325 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+    <title>CTM_SPORT</title>
+    <!-- font Awesome -->
+    <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- pure style -->
+    <link rel="stylesheet" href="css/pure-min.css" />
+
+    <link rel="stylesheet" href="css/grids-responsive-min.css" />
+
+    <!-- Custom style -->
+    <link rel="stylesheet" href="css/customer.css" />
+
+    <!--Date Picker-->
+    <link href="datePicker/css/jquery.dateselect.css" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+    <header class="home-menu pure-menu pure-menu-horizontal pure-menu-fixed">
+        <a class="pure-menu-heading" href=""><img src="image/logo.png">
+        </a>
+        <ul class="pure-menu-list">
+            <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
+                <a href="#" id="menuLink1" class="pure-menu-link">Sports</a>
+                <ul class="pure-menu-children">
+                    <li class="pure-menu-item"><a href="#" class="pure-menu-link">NFL</a>
+                    </li>
+                    <li class="pure-menu-item"><a href="#" class="pure-menu-link">NBA</a>
+                    </li>
+                    <li class="pure-menu-item"><a href="#" class="pure-menu-link">MLB</a>
+                    </li>
+                    <li class="pure-menu-item"><a href="#" class="pure-menu-link">NCAAF</a>
+                    </li>
+                    <li class="pure-menu-item"><a href="#" class="pure-menu-link">Soccer</a>
+                    </li>
+                    <li class="pure-menu-item"><a href="#" class="pure-menu-link">Tennis</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="pure-menu-item" id="user"><a href="billing/login.html" class="pure-menu-link">Login</a>
+            </li>
+        </ul>
+
+    </header>
+    <article>
+        <h1 class="title">Scoreboard</h1>
+        <h3>Scores for <input type="text" name="date2" id="date2" class="scoreDate"/> <span class="errspan"><a class="pure-button btn-date"><i class="fa fa-calendar fa-2x"></i></a></span></h3>
+        <section class="pure-g">
+            
+
+        </section>
+
+     <div class="modal fade" id="myModal" style="z-index:100000000050;">
+                <div class="modal-dialog" style="margin:60px auto;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title"><i class="icon-question-sign">購買方案</i></h4>
+                        </div>
+                       
+                        <div class="modal-footer">
+                            <a href="#" data-dismiss="modal" class="btn btn-default">取消</a>
+                            <a href="javascript:void(0)" id="singlePlay"  class="btn btn-primary">買單場</a>
+                            <a href="javascript:void(0)" id="allPlay"  class="btn btn-primary">買全場</a>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+
+    </article>
+
+    <!-- jQuery 2.0.2 -->
+    <script src="js/jquery-v2.0.2.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="datePicker/js/jquery.dateselect.js" type="text/javascript">
+    </script>
+    <script src="datePicker/js/jquery.mousewheel.js"></script>
+    
+    <script src="game_data/game.js" type="text/javascript"></script>
+    <script src="billing/js/logout.js" type="text/javascript"></script>
+    
+    <script>
+        $(document).ready(function () {
+            $('.btn-date').on('click', function (e) {
+                e.preventDefault();
+                $.dateSelect.show({
+                    element: 'input[name="date2"]'
+                });
+            });
+            $('.scoreBox').on('click', function (e) {
+                alert("go live");
+            });
+    
+        });
+    </script>
+    
+    <script>
+         var json = window.localStorage.getItem('userDetail');
+         var userDetail = JSON.parse(json);	
+         
+          today = new Date();
+					today_year = today.getFullYear(); //西元年份			
+					today_month = today.getMonth()+1; //一年中的第幾月			
+					today_date = today.getDate(); //一月份中的第幾天					
+					today_hours = today.getHours(); //一天中的小時數			
+					today_minutes = today.getMinutes(); //一天中的分鐘				
+					today_seconds = today.getSeconds(); //一天中的秒數
+					var currentDate = today_year+"/"+today_month+"/"+today_date+"  "+today_hours+":"+today_minutes+":"+today_seconds;
+          console.log(currentDate);
+         $(function() {	
+	
+				    if(userDetail != null){
+				    	   
+					       $('#user a').html("<span class=\"hidden-xs\" style=\"float:left;\">"+userDetail.username+",&nbsp;</span>"+"Log out");
+				    		 $('#user a').attr("href","#").attr("onclick","logout()");
+					  }
+				           
+					  console.log(game_json);
+					  $.each(game_json,function(i,row){
+					  	  gameList(userDetail,i,row);
+					  });
+	  
+	       });
+	       
+	       function gameList(userDetail,i,row){
+	       	
+	       	  var content = '<div class="pure-u-1-2 pure-u-md-1-3 pure-u-lg-1-4">';
+	       	  if(userDetail == null){
+	       	  	  content += '<div class="scoreBox" onclick="forwardLogin()">';
+	       	  }else{
+			         if(userDetail.vip == 0){
+			         	   content += '<div class="scoreBox" onclick="playVideo(\''+row.playurl+'\',\''+row.gameDate+'\',\''+row.endDate+'\',\''+row.contextPath+'\')">';
+			         }else if(userDetail.vip == 1){
+			         	   content += '<div class="scoreBox" onclick="checkBuy(\''+row.id+'\',\''+row.playurl+'\',\''+row.gameDate+'\',\''+row.endDate+'\',\''+row.contextPath+'\')">';
+			         }
+	       	  }
+	       	  
+	       	 content +=  '<div class="pure-u-lg-14-24 pure-u-md-1 team">';
+           if(row.isFinal == 0){
+              	content += '<h5 class="Final">Final</h5>';
+           }else if(row.isFinal == 1){
+           	    content += '<h5 class="Final live">'+row.gameTo+'</h5>';
+           }else if(row.isFinal == 2){
+           	    content += '<h5 class="Final game">'+row.gameTime+'</h5>';
+           }
+           content += '<div class="pure-u-11-24 pure-u-lg-1  score-team">'+
+                      '<div class="pure-u-1 pure-u-lg-6-24"><img class="pure-img-responsive" src="'+row.awayCover+'">'+    
+                      '</div>'+
+                      '<div class="pure-u-1 pure-u-lg-17-24">'+      
+                      '<p>'+row.awayName+'</p>'+     
+                      '<small>(51-27, 23-15 Away)</small>'+    
+                      '</div>'+          
+                      '</div>'+        
+                      '<div class="pure-u-11-24 pure-u-lg-1 score-team">'+
+                      '<div class="pure-u-1 pure-u-lg-6-24"><img class="pure-img-responsive" src="'+row.homeCover+'"> </div>'+  
+                      '<div class="pure-u-1 pure-u-lg-17-24">'+      
+                      '<p>'+row.homeName+'</p>'+      
+                      '<small>(33-44, 17-21 Home)</small> </div>'+          
+                      '</div>'+          
+                      '</div>'; 
+           if(row.isFinal != 2){
+              content += '<div class="pure-u-lg-3-24 score-r">'+
+                         '<div class="pure-u-5-24  pure-u-lg-1">'+
+                         '<h5>R</h5>'+
+                         '</div>'+
+                         '<div class="pure-u-7-24 pure-u-lg-1">'+
+                         '<p>7</p>'+
+                         '</div>'+
+                         '<div class="pure-u-8-24 pure-u-lg-1 home-team">'+
+                         '<p>9</p>'+
+                         '</div>'+
+                         '</div>'+
+                         '<div class="pure-u-lg-3-24 score-h">'+
+                         '<div class="pure-u-5-24 pure-u-lg-1">'+
+                         '<h5>H</h5>'+
+                         '</div>'+
+                         '<div class="pure-u-7-24 pure-u-lg-1">'+
+                         '<p>9</p>'+
+                         '</div>'+
+                         '<div class="pure-u-8-24 pure-u-lg-1 home-team">'+
+                         '<p>10</p>'+
+                         '</div>'+
+                         '</div>'+
+                         '<div class="pure-u-lg-3-24 score-e">'+
+                         '<div class="pure-u-5-24 pure-u-lg-1">'+
+                         '<h5>E</h5>'+
+                         '</div>'+
+                         '<div class="pure-u-7-24 pure-u-lg-1">'+
+                         '<p>1</p>'+
+                         '</div>'+
+                         '<div class="pure-u-8-24 pure-u-lg-1 home-team">'+
+                         '<p>2</p>'+
+                         '</div>'+
+                         '</div>'+
+                         '</div>'+
+                         '</div>';
+           }       
+                    
+           $('.pure-g').append(content);
+                            
+	       }
+	       
+	       
+	       
+	    function playVideo(playurl,gameTime,endDate,contextPath){
+		
+		    if(checkPlayTime(gameTime)){
+		   	  alert('尚未開始直播');
+		   	  return;
+		    }
+		   
+		   playurl += '?Token='+userDetail.token+'&UserId='+userDetail.id;
+		   
+		   var jsonData = JSON.stringify({"contextPath" : contextPath,"startTime":gameTime,"endTime":endDate});
+			  $.ajax({
+						url: 'http://125.31.3.121:80/JWTLoginWeb/getHash',
+						type: 'POST',
+						contentType: "application/json",
+						data: jsonData ,
+						dataType: "text",
+						async: false,
+						error: function(xhr) {},
+						success: function(response) {
+						      console.log(response);
+						      playurl += '&'+response;
+					    }
+		    });
+			  
+			  console.log(playurl);
+			  var res = encodeURIComponent(playurl);
+			  console.log(res);
+			
+			  if(window.JSInterface){
+			   	 window.JSInterface.startVideo(playurl);
+			  }else{
+			  	 window.localStorage.setItem("playurl",playurl);
+			   	 setTimeout(function () {
+            location.href = 'play.html';
+           }, 200);
+			   	 
+			  }
+		
+	    }
+	
+		function checkPlayTime(gameTime){
+			  console.log(gameTime);
+			  console.log((Date.parse(gameTime)));
+			  console.log((Date.parse(currentDate)));
+		    if( (Date.parse(gameTime)).valueOf() < (Date.parse(currentDate)).valueOf() ){     
+		         return false;
+		    }else{
+		    	   return true;
+		    }  
+		}
+	
+	
+		function checkBuy(id,playurl,gameTime,endDate,contextPath){
+		   
+		   
+		   if(checkPlayTime(gameTime)){
+		   	  alert('尚未開始直播');
+		   	  return;
+		   }
+		   
+		   
+		   $('#singlePlay').unbind('click');
+		   $('#allPlay').unbind('click');
+
+		   $('#singlePlay').on('click',function(){
+		   	   //買單場要做的事.....
+		   	   
+		   	   $('#myModal').modal('hide');	  
+		   	   playVideo(playurl,gameTime,endDate,contextPath);
+		   	    	   	 
+		   });
+		   
+       $('#allPlay').on('click',function(){
+       	   //買全場要做的事...
+		   	   userDetail.vip = 0;
+		   	   window.localStorage.setItem('userDetail', JSON.stringify(userDetail));
+		   	   
+		   	   $('#myModal').modal('hide');	
+		   	   playVideo(playurl,gameTime,endDate,contextPath);
+		   	   
+		   });	
+		   $('#myModal').modal('show');	   
+	  }
+	
+	
+	
+	
+		function forwardLogin(){
+			  alert('請先登入');
+			  location.href="billing/login.html"
+		}
+	
+		function logout(){
+				//localStorage.clear();
+				window.localStorage.removeItem("userDetail");
+				
+				//var maxNum = 10000;  
+				//var minNum = 1;  
+				//var num = Math.floor(Math.random() * (maxNum - minNum + 1)) + minNum; 
+				
+				//registerToken("999999","999999");
+				
+				
+				location.href="index.html";
+		}
+	       
+	       
+    </script>
+    
+    
+</body>
+
+</html>

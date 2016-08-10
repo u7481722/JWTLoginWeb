@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+   
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+     <!-- <logger name="org.springframework.web" level="DEBUG"/> -->
+    <jmxConfigurator/>
+ 
+ 
+ 
+ 
+ 
+ <!--    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+	<property name="LOG_FILE" value="${LOG_PATH}/spring.log}"/>
+	<include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+ <appender name="FILE"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<encoder>
+			<pattern>${FILE_LOG_PATTERN}</pattern>
+		</encoder>
+		<file>${LOG_FILE}</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+			<fileNamePattern>${LOG_FILE}.%i</fileNamePattern>
+		</rollingPolicy>
+    <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+	  <maxFileSize>1MB</maxFileSize>
+	</triggeringPolicy>
+	</appender>
+	<root level="INFO">
+		<appender-ref ref="CONSOLE" />
+		<appender-ref ref="FILE" />
+	</root>  
+  -->
+    
+</configuration>
